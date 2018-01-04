@@ -1,0 +1,28 @@
+{
+  "name": "sitexml",
+  "version": "1.0.0",
+  "description": "SiteXML Core",
+  "main": "sitexml",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Zelensky",
+  "license": "MIT",
+  "devDependencies": {
+    "cli-color": "^1.2.0"
+  },
+  "dependencies": {
+    "path": "^0.12.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichaelZelensky/sitexml-node.git"
+  },
+  "keywords": [
+    "sitexml"
+  ],
+  "bugs": {
+    "url": "https://github.com/MichaelZelensky/sitexml-node/issues"
+  },
+  "homepage": "https://github.com/MichaelZelensky/sitexml-node#readme"
+}
