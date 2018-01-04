@@ -1,5 +1,5 @@
 var sitexml = require('./sitexml')
-var test = require('./mztest');
+var test = require('mztest');
 
 //initial
 test(function(t){
