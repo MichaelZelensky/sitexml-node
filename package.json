@@ -1,6 +1,6 @@
 {
   "name": "sitexml",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SiteXML Core",
   "main": "sitexml",
   "scripts": {
@@ -12,7 +12,10 @@
     "mztest": "^1.0.0"
   },
   "dependencies": {
-    "path": "^0.12.7"
+    "express": "^4.16.2",
+    "path": "^0.12.7",
+    "url": "^0.11.0",
+    "xmldom": "^0.1.27"
   },
   "repository": {
     "type": "git",

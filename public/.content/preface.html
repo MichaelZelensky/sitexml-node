@@ -1,0 +1,202 @@
+<h1>Introduction</h1>
+<ul class="index">
+  <li><a href="#about">What it is all about</a></li>
+  <li><a href="#problem">Problem statement</a></li>
+  <li><a href="#principles">SiteXML principles</a></li>
+</ul>
+
+<p style="font-style:italic; padding-left: 20px">Note:<br>Some history and philosophy goes below, so if you were looking for more specific technical details, you
+might want to consider going directly to <%PLINK(4)%> or <%PLINK(7)%>.</p>
+
+<a name="#about"></a><h2>What it is all about</h2>
+
+<p>The key SiteXML thesis is the following:</p>
+
+<p style="background:#ddd; margin-left: 20px; margin-top: 10px; margin-bottom: 30px; padding: 10px">At the time when HTML was developed, the web <strong>was thought as a network of static pages</strong>, linked
+together with hyperlinks, and therefore HTML was a standard to a web page. Today the Internet <strong>is thought as the network of sites</strong>, but we still do not have a standard to a website.</p>
+
+<!--div style="float:right; padding-left: 5px; padding-bottom: 5px; width: 250px; height: 340px"><img src="/images/tim_berners-lee.jpg" alt="Sir Tim Berners-Lee" title="Sir Tim Berners-Lee, on of the developers of HTML standars, on of the founders of W3C"><br><i>Sir Tim Berners-Lee, one of the inventors of WWW</i></div-->
+
+<p>Internet publishing is based on the HTML standard, developed in the
+1980's by Tim Berners-Lee and colleagues. Today, HTML is only an
+illusion when speaking of server-side. Yes, there is HTML in your browser, when you request a page from a server, but there are no HTML pages on the server. It became
+so due to historical reasons, mostly because of the browser war which took place on Earth some years after the first site was published. While browser producers
+struggled to make Internet look better in their browsers, enforcing and polishing HTML and other client-related standards,
+server-side developers distorted the initial simple and clear idea. Where is 
+that  HTML's simplicity? If you look at a website source code on a server, you will be terrified how complex and difficult it is: a weird collection of files, snippets, source code; various programming languages, databases, exotic homebrew frameworks, all difficult to combine.</p>
+
+<p>What have we lost, ignoring HTML principles at server side? First of all, it is simpicity, of course. Let's dig further: the fundamental principles of HTML, which is still the basis of the modern Internet by the way, were:</p>
+
+<ul>
+  <li>focus on valuable content, rather than styling and interactivity;</li>
+  <li>free, accessible, and simple enough to be edited by anyone who has something 
+to say;</li>
+  <li>platform-independent: if you simply copy a site from Unix to Mac or PC 
+or whatever, and it will work! — this is what is called a standard.</li>
+</ul>
+
+<p>Sites, made on pure HTML had both advantages and disadvantages.
+Advantages:</p>
+
+<ul>
+  <li>fast loading;</li>
+  <li>simple and readabile code;</li>
+  <li>easily creatable and editable with plain text
+  processors (mostly free or preinstalled);</li>
+  <li>requiring no need to know programming;</li>
+  <li>content-driven file structure;</li>
+  <li>direct relationship between file structure and URL—easy to
+  locate, create, edit, and publish web-pages.</li>
+</ul>
+
+<p>Pure HTML approach had also some disadvantages:</p>
+
+<ul>
+  <li>poor styling;</li>
+  <li>poor interactivity.</li>
+</ul>
+
+<p>These disadvantages are hardly possessed by the modern approach of 'heavy' backend, but this modern approach also hardly has the old school advantages.</p>
+
+<p>20 year ago we could not know what the web would be today. And
+today it is the time of highly interactive pages with
+rich-authoring functionality, and this is very different from the
+Internet of the early 1990s. The difference is that now 
+<b>the Internet is thought as the network of sites</b>, but we
+still do not have a standard to a website.</p>
+
+<p>The Internet today is based on HTML as if the web still was the
+network of pages, but actually, all HTML principles are dropped as if they were useless:</p>
+
+<ul>
+  <li>Webservers only pretend to have HTML pages. Even simple
+  static sites do not have in fact nothing even similar to HTML
+  pages! Even more: it became a 'mauvais ton' to make sites using HTML
+  technology. How could the beautiful HTML, which is the
+  fundamental of the Internet, become the sign of a bad
+  style?!</li>
+  <li>Simple static pages are served by too powerful site engines
+  (mostly scripting and because of that slow) and CMS's that
+  generate too much server, client, and broadband
+  load per page.</li>
+  <li>Backend is absolutely dependent on platform—you cannot
+  just copy your site from Unix to Windows, you can even hardly
+  copy your site from Unix to another Unix—that will not work in
+  most cases!</li>
+  <li>Sites are nearly impossible to maintain by non-programmers. Publishers depend on developers who</li><ul>
+    <li>choose server configuration;</li>
+    <li>code their own functions;</li>
+    <li>are the only (or from limited amount of people) who can control and update the site, made by them.</li>
+  </ul>
+  <li>It is quite difficult to create and keep track of site's components;</li>
+  <li>We depend on intermediate tools like scripting engines, databases, modules, templates.</li></ul><p>All this makes the task of setting up and working a website
+  for someone, who has something valuable to talk about, but not a programmer, a quite
+  uneasy thing.</p>
+
+  <p>Summing up, we have come to a point where we can create very interactive sites on the Internet, at the cost of the fundamental web principles. SiteXML tries to solve them, read on.</p>
+
+<a name="problem"></a><h2>Problem Statement</h2>
+
+<p>This work's goal is to revise HTML principles in perspective
+of the modern Internet. We want to return to pure HTML, keep it
+simple, but highly interactive. Let us try to break down this general task into more discrete goals. They are:</p>
+<ol>
+  <li>Suggest a standard to file structure of websites to ensure
+  that: 
+  <ul>
+    <li>sites are platform- and developer-independent, at least at
+    content level;</li>
+    <li>different kinds of developers depend less on each other as
+    much as possible; their work is better reused throughout the
+    Internet: design, modules, rich editors. (<i>As a consequence, this
+    will react in better web usability: similar functions looking
+    similar on different sites result in well-expected UI behavior and this is a good usability.</i>)</li>
+  </ul></li>
+  <li>Introduce client-server interaction protocol, or STP (Site
+  Transfer Protocol) 
+  <ul>
+    <li>to help frontend and backend developers work more independently, <i>thus providing more effective
+    Internet development by better reuse of components</i>.</li>
+  </ul></li>
+  <li>make file structure of sites more readable, accessible and
+  editable: 
+  <ul>
+    <li>separate content into PURE HTML, as if a site would really be a collection of HTML pages;</li>
+    <li>make sites, especially content, editable with both rich editors and text
+    processors, <i>thus giving full control over content and easy access to its update</i>.</li>
+  </ul></li>
+  <li>And, last but not least, keep it all as simple as pure HTML,
+  but as powerful, as modern technology level web sites. This is the essence of our idea.</li>
+</ol>
+
+
+<a name="principles"></a><h2>The Principles</h2>
+
+<p>We spoke about <i>what</i>, now speak about <i>how.</i></p><p>The solution to the problem must meet the following criteria, that are very much similar to HTML principles:</p>
+<ol>
+  <li>Clear file structure: 
+  <ul>
+    <li>Focus on content;</li>
+    <li>Content is pure HTML files;</li>
+    <li>File structure reflects content structure.<br><br></li>
+  </ul></li>
+  <li>Cover 90% of site needs:<ul>
+    <li>Focus on content-oriented sites;</li>
+    <li>Reuse repeated from-site-to-site interactivity: forums,
+    feedback, comments, etc.;<br><br></li>
+  </ul></li>
+  <li>Platform independent:<ul>
+    <li>Webserver-integrated—you can copy
+    SiteXML site to any platform and it should start working
+    automatically (at least at content level);</li>
+    <li>Any modern and popular CMS should be able run SiteXML
+    sites;</li>
+    <li>Any scripting back-end languages must support SiteXML in case
+    of obsolete servers, or because of need of specific customization;</li>
+    <li>any browser should be able to run a SiteXML site alone
+    (without running back-end driven functions, of course).<br><br></li>
+  </ul></li>
+  <li>Avoid intermediate software, that make our sites more
+  platform-dependent:<ul>
+    <li>no databases;</li>
+    <li>no frameworks;</li>
+    <li>and no scripting engines when possible.<br><br></li>
+  </ul></li>
+  <li>Component independent to keep it as light and swift as possible, but infinitely flexible and extensible:
+  <ul>
+  <li>you should be free to choose your own components to run that site:<ul>
+<li>server-side engine, from server integrated to your favorite CMS, stand-alone scripting engine, or your custom engine;</li>
+<li>custom client editing tool—from none to reach editors or CMS's;</li>
+  <li>reusable themes and modules.<br><br></li>
+  </ul>
+  </li></ul>
+  </li><li>Convey good usability principles:
+  <ul>
+  <li>Ajax-browsing—why loading whole page every time? -&nbsp;Every time we request a page, we should load only changeable parts:&nbsp;content-portions, defined in layout, e.g. banner on top, ad column on the right, main content in the middle;</li>
+  <li>Unchangeable portions should stay untouched while browsing, there is absolutely no need to load them with every page: &nbsp;styles and layout, navigation, javascripts, images, etc.;</li>
+  <li>In-place content authoring should become a standard:&nbsp;it should be as easy as working with modern text processors.</li>
+  </ul></li></ol>
+  <p>Server integration. Webservers should have
+  native support of SiteXML. </p>
+  <ul>
+    <li>One SiteXML engine per server, integrated into webserver;
+    no CMS, no site engine, or any other executable script or DB in
+    SiteXML site directory. There is only site-specific content in
+    SiteXML site directory.</li>
+    <li>gives better maintenance</li>
+    <li>server admin maintains only one instance of site engine,
+    that servers all sites on the server.</li>
+    <li>more reliability</li>
+    <li>sites do not depend on custom site engine or CMS
+    developers, programmers and different hosting environments</li>
+    <li>less files in site directory</li>
+    <li>better file manipulation,</li>
+    <li>backup / recovering</li>
+    <li>faster</li>
+    <li>no need to load scripting engines</li>
+    <li>site engine is compiled into web-server</li>
+    <li>better site cashing</li>
+    <li>easy support for hosters</li>
+    <li>all they do is add a webserver module that supports
+    SiteXML, and voila! your favorite hoster company supports
+    SiteXML!</li></ul>

@@ -1,0 +1,138 @@
+<h1>API</h1>
+
+<ul class="index">
+  <li><a href="#stp">STP</a></li>
+  <li><a href="#macrolanguage">Macrolanguage</a></li>
+  <li><a href="#output">Output presets</a></li>
+</ul>
+
+<a name="stp"></a><h2>Site Transfer Protocol (STP)</h2>
+
+<h3>GET:</h3>
+
+<p>Get page:</p>
+<p><span class="codestring">http://www.site.com/?id=[id]</span>, same as<br>
+<span class="codestring">http://www.site.com/[address]</span>, or simply<br>
+<span class="codestring">http://www.site.com/</span> - in this case startpage will be returned</p>
+<p>Get content by page id and content name, usually used for Ajax-browsing:</p>
+<p>
+<span class="codestring">?id=[id]&amp;cname=[cname]</span></p>
+<p>Get content by id:</p>
+<p><span class="codestring">?cid=[cid]</span></p>
+<p>Get site XML; returns site XML depending on user's permissions:</p>
+<p><span class="codestring">?sitexml</span></p>
+<p>Login:</p>
+<p><span class="codestring">?login</span></p>
+<p>Login and load WYSIWYG UI:</p>
+<p><span class="codestring">?edit</span></p>
+<p>Logout:</p>
+<p><span class="codestring">?logout</span></p>
+
+<h3>POST:</h3>
+
+<p>Update content:</p>
+<p><span class="codestring">?cid</span><br>
+Post data: <span class="codestring">content</span></p>
+<p>Update XML</p></p>
+<span class="codestring">?xml</span><br>
+Post data: <span class="codestring">xml</span></p>
+
+<h2>SiteXML</h2>
+
+<div class="no-bullet">
+<ul>
+    <li>SITE<ul>
+        <li>@name</li>
+        <li>META<ul>
+            <li>@name</li>
+            <li>@charset</li>
+            <li>@http-equiv</li>
+            <li>@scheme</li>
+            <li>@content</li>
+            <li>node content</li>
+        </ul></li>
+        <li>THEME<ul>
+            <li>@dir {String}</li>
+            <li>@id {Integer} unique required</li>
+            <li>@file {String}</li>
+            <li>@default {yes | no (or unspecified)}</li>
+            <li>CONTENT<ul>
+                <li>@id {Integer} unique required</li>
+                <li>@name {String} required</li>
+                <li>@type {module | unspecified means show as text)</li>
+                <li>@params - query string of parameters to be passed to the module</li>
+                <li>node content</li>
+            </ul></li>
+        </ul></li>
+        <li>PAGE<ul>
+            <li>@id {Integer} unique required</li>
+            <li>@startpage {yes | unspecified = no}</li>
+            <li>@nonavi {yes | unspecified = no}</li>
+            <li>@name {String}</li>
+            <li>@title {String}</li>
+            <li>@alias {String}</li>
+            <li>@theme {Integer}</li>
+            <li>META - same element as above</li>
+            <li>CONTENT - same element as above</li>
+        </ul></li>
+    </ul>
+</li></ul>
+</div>
+
+<h2>Macrolanguage</h2>
+
+<p>Macrolanguage is used for setting various placeholders in themes and raw content. SiteXML engine will replace these macrocommands with the appropriate HTML.</p>
+<p>Page content placeholder:</p>
+<p><span class="codestring">&lt;%CONTENT(name)%&gt;</span></p>
+<p>Page is parsed for content placeholders two times: to replace theme content placeholders, then replace page content placeholders</p>
+<p>Meta tags:<br>
+<span class="codestring">&lt;%META%&gt;</span>
+</p>
+<p>Navigation:<br>
+<span class="codestring">&lt;%NAVI%&gt;</span> or <span class="codestring">&lt;%NAVI([root_page_id], [levels])%&gt;</span><br>
+Parameter <span class="codestring">root_page_id</span> specifies the root page for navigation tree. Default is 0, which means that the root node is <span class="codestring">//site</span><br>
+Parameter <span class="codestring">levels</span> specifes how many levels are to output. Default is 2.
+</p>
+<p>Title:<br>
+<span class="codestring">&lt;%TITLE%&gt;</span><br>
+If no <span class="codestring">title</span> parameter is given in the <span class="codestring">page</span> node, then <span class="codestring">name</span> will be used.
+</p>
+<p>Theme files path:<br>
+<span class="codestring">&lt;%THEME_PATH%&gt;</span>
+</p>
+<p>Client script:<br>
+<span class="codestring">&lt;%SCRIPT%&gt;</span>
+</p>
+<p>Link to a page:<br>
+<span class="codestring">&lt;%PLINK([page_id])%&gt;</span>
+</p>
+<p>Site name:<br>
+<span class="codestring">&lt;%SITENAME%&gt;</span>
+</p>
+
+
+<a name="output"></a><h2>Output predefines</h2>
+
+<p>The output presets are templates of HTML which is generated to replace macrocommands in themes and raw content. Presets are important because client software, e.g. SiteXML jsClient base on these rules, which are mostly related to CSS and HTML structure.</p>
+<h3>Navigation</h3>
+<p>Navigation is generated automatically basing on the structure or <span class="codestring">.site.xml</span>. It is nested inside &lt;navi&gt; tag, and this is a plain hierarhy of ul > li > a. All nested levels are nested inside &lt;li&gt;, after &lt;a&gt;:<br><br></p>
+<div class="code">
+navi<br>
+&nbsp;&nbsp;ul<br>
+&nbsp;&nbsp;&nbsp;&nbsp;li pid="[pid]"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a href="[href]" pid="[pid]"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ul<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ul<br>
+&nbsp;&nbsp;&nbsp;&nbsp;/li<br>
+&nbsp;&nbsp;&nbsp;&nbsp;...<br>
+&nbsp;&nbsp;/ul<br>
+navi<br>
+</div>
+<p>Note, that the navigation A and LI elements have <span class="codestring">pid</span> attribute.</p>
+<h3>Content</h3>
+<p>Content is nested in the following tag:<br><br><p>
+<div class="code">
+&lt;div class="siteXML-content" cid="[cid]" cname="[content_name]"&gt;
+</div>
+<p>Note, that the content container div has custom attributes cid and cname.</p>
