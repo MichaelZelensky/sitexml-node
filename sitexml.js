@@ -104,6 +104,19 @@ sitexml.getPageNodeById = function (id){
   return this.getElementById('page', id)
 }
 
+sitexml.getPageNodeByAlias = function (alias){
+  if (alias == undefined) return "error: no page alias given"
+  if (!this.xmldoc) this.setXmlDoc()
+  var pages = this.xmldoc.getElementsByTagName('page')
+  for (var i = 0; i < pages.length; i++) {
+    var pageAlias = pages[i].getAttribute('alias')
+    //console.log(pageAlias, pageAlias.replace(/^\//, '').replace(/\/$/, ''), alias, alias.replace(/^\//, '').replace(/\/$/, ''))
+    if (pageAlias.replace(/^\//, '').replace(/\/$/, '') == alias.replace(/^\//, '').replace(/\/$/, '')) {
+      return pages[i]
+    }
+  }
+}
+
 sitexml.getElementById = function (name, id, parent) {
   if (id == undefined) return "error: no element id given"
   if (name == undefined) return "error: no element name given"

@@ -170,6 +170,20 @@ test(function(t){
   t.is(typeof html, "string", "Type of getPageHTMLByPageNode is string")
 })
 
+//getPageByAlias
+test(function (t) {
+  var alias = 'test/nocontent'
+  var pIDCheck = 29
+  var page = sitexml.getPageNodeByAlias(alias)
+  t.is(page.getAttribute('id'), pIDCheck, 'getPageByAlias 1')
+  page = sitexml.getPageNodeByAlias('/' + alias)
+  t.is(page.getAttribute('id'), pIDCheck, 'getPageByAlias 2')
+  page = sitexml.getPageNodeByAlias('/' + alias + '/')
+  t.is(page.getAttribute('id'), pIDCheck, 'getPageByAlias 3')
+  page = sitexml.getPageNodeByAlias(alias + '/')
+  t.is(page.getAttribute('id'), pIDCheck, 'getPageByAlias 4')
+})
+
 //end and print stats
 test(function(t){
   t.end();

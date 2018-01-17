@@ -45,7 +45,14 @@ app.get('*', function(req, res, next) {
     res.set('Content-Type', 'text/html')
     res.send(html)
   } else {
-    var page = sitexml.getPageByAlias(pathname)
+    var page = sitexml.getPageNodeByAlias(pathname)
+    if (page) {
+      var html = sitexml.getPageHTMLByPageNode(page)
+      res.set('Content-Type', 'text/html')
+      res.send(html)
+    } else {
+      res.send("SiteXML: no page found")
+    }
   }
   next()
 });
