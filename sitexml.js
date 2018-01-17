@@ -35,6 +35,10 @@ sitexml.error = function(msg) {
 sitexml.getPageById = function(id){
   if (id == undefined) return "error: no page id given"
   var page = this.getPageNodeById(id)
+  return this.getPageHTMLByPageNode(page);
+}
+
+sitexml.getPageHTMLByPageNode = function(page){
   var title = this.getPageTitle(page)
   var sitename = this.getSiteName(page)
   var content = []

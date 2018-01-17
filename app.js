@@ -17,8 +17,9 @@ app.use(function(err, req, res, next) {
 });
 
 // STP GET
-app.get('/', function(req, res, next) {
+app.get('*', function(req, res, next) {
   var url_parts = url.parse(req.url, true)
+  var pathname = url_parts.pathname
   var query = url_parts.query
 
   //?xml
@@ -43,6 +44,8 @@ app.get('/', function(req, res, next) {
     var html = sitexml.getContentNodeTextContent(sitexml.getContentNodeById(query.cid))
     res.set('Content-Type', 'text/html')
     res.send(html)
+  } else {
+    var page = sitexml.getPageByAlias(pathname)
   }
   next()
 });

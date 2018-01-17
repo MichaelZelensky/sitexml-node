@@ -163,6 +163,13 @@ test(function(t){
   t.is(htmlCheck, newHtml, "normalizeThemeHtml 1")
 })
 
+//getPageHTMLByPageNode
+test(function(t){
+  var page = sitexml.getPageNodeById(10)
+  var html = sitexml.getPageHTMLByPageNode(page);
+  t.is(typeof html, "string", "Type of getPageHTMLByPageNode is string")
+})
+
 //end and print stats
 test(function(t){
   t.end();
