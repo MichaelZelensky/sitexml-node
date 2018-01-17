@@ -184,6 +184,19 @@ test(function (t) {
   t.is(page.getAttribute('id'), pIDCheck, 'getPageByAlias 4')
 })
 
+//getPageThemeHtml
+test(function(t){
+  var page = sitexml.getPageNodeById(10)
+  var themeHtml = sitexml.getPageThemeHtml(page)
+  t.is(typeof themeHtml, 'string', 'getPageThemeHtml is string')
+})
+
+//getDefaultTheme
+test(function(t){
+  var theme = sitexml.getDefaultTheme()
+  t.is(theme.getAttribute('id'), 3, 'getDefaultTheme 1')
+})
+
 //end and print stats
 test(function(t){
   t.end();

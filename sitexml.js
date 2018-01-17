@@ -39,6 +39,7 @@ sitexml.getPageById = function(id){
 }
 
 sitexml.getPageHTMLByPageNode = function(page){
+  var themeHtml = this.getPageThemeHtml(page)
   var title = this.getPageTitle(page)
   var sitename = this.getSiteName(page)
   var content = []
@@ -50,6 +51,22 @@ sitexml.getPageHTMLByPageNode = function(page){
     })
   }
   return this.processor.processPage({title, sitename, content})
+}
+
+sitexml.getPageThemeHtml = function(node) {
+  var themeId = node.getAttribute('theme')
+  var themeNode = (themeId) ? sitexml.getThemeById(theme) : sitexml.getDefaultTheme()
+}
+
+sitexml.getDefaultTheme = function(node) {
+  var themes = sitexml.xmldoc.getElementsByTagName('theme')
+  var theme = themes[0]
+  for (var i = 0; i < themes.length; i++) {
+    if (themes[i].getAttribute('default')) {
+      theme = themes[i]
+    }
+  }
+  return theme
 }
 
 sitexml.getPageTitle = function(node) {
