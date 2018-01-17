@@ -13,20 +13,14 @@ processor.defaultThemeHtml = fs.readFileSync('./_default_theme.thm', processor.e
 processor.processPage = function(page){
   var html = page.themeHtml || this.defaultThemeHtml
   html = this.normalizeThemeHtml(html)
-  html = this.replaceTitle(html, page.title)
-  html = this.replaceSiteName(html, page.sitename)
-  if (page.content) {
-    for (var i = 0; i < page.content.length; i++) {
-      console.log(page.content[i].name)
-      html = this.replaceContent(html, page.content[i].name, page.content[i].html)
-    }
+  if (page.title) html = this.replaceTitle(html, page.title)
+  if (page.sitename) html = this.replaceSiteName(html, page.sitename)
+  if (page.themePath) html = this.replaceThemePath(html, page.themePath)
+  if (page.content) for (var i = 0; i < page.content.length; i++) {
+    console.log(page.content[i].name)
+    html = this.replaceContent(html, page.content[i].name, page.content[i].html)
   }
   return html
-}
-
-processor.replaceContent = function(html, name, content) {
-  name = name.toUpperCase()
-  return html.replace(`<%CONTENT(${name})%>`, content)
 }
 
 /*
@@ -62,15 +56,27 @@ processor.normalizeThemeHtml = function(html){
 /*
 @returns {String}
 */
+processor.replaceThemePath = function(html, string){
+  return html.replace(/<%THEME_PATH%>/g, string)
+}
+
+/*
+@returns {String}
+*/
 processor.replaceTitle = function(html, title){
-  return html.replace(/<%TITLE%>/, title)
+  return html.replace(/<%TITLE%>/g, title)
 }
 
 /*
 @returns {String}
 */
 processor.replaceSiteName = function(html, string){
-  return html.replace(/<%SITENAME%>/, string)
+  return html.replace(/<%SITENAME%>/g, string)
+}
+
+processor.replaceContent = function(html, name, content) {
+  name = name.toUpperCase()
+  return html.replace(`<%CONTENT(${name})%>`, content)
 }
 
 module.exports = processor

@@ -136,6 +136,15 @@ test(function(t) {
   t.is(newHtml, htmlCheck, "replaceSiteName 1")
 })
 
+//replaceThemePath
+test(function(t) {
+  var html = "abc <%THEME_PATH%> ghi"
+  var string = "/some_path/"
+  var newHtml = sitexml.processor.replaceThemePath(html, string)
+  var htmlCheck = "abc /some_path/ ghi"
+  t.is(newHtml, htmlCheck, "replaceThemePath 1")
+})
+
 //replaceContent
 test(function (t) {
   var html = "abc <%CONTENT(MAIN)%> ghi"
