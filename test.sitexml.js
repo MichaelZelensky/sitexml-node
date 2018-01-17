@@ -136,6 +136,16 @@ test(function(t) {
   t.is(newHtml, htmlCheck, "replaceSiteName 1")
 })
 
+//replaceContent
+test(function (t) {
+  var html = "abc <%CONTENT(MAIN)%> ghi"
+  var name = 'main'
+  var content = "some_test_content"
+  var htmlCheck = "abc some_test_content ghi"
+  var newHtml = sitexml.processor.replaceContent(html, name, content)
+  t.is(newHtml, htmlCheck, "replaceContent 1")
+})
+
 //normalizeThemeHtml
 test(function(t){
   var html = "abc <% TIT le %> ghi"

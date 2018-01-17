@@ -15,11 +15,18 @@ processor.processPage = function(page){
   html = this.normalizeThemeHtml(html)
   html = this.replaceTitle(html, page.title)
   html = this.replaceSiteName(html, page.sitename)
-  if (page.content)
-  for (var i = 0; i < page.content.length; i++) {
-    html = this.replaceContent(html, page.content[i].name, page.content[i].html)
+  if (page.content) {
+    for (var i = 0; i < page.content.length; i++) {
+      console.log(page.content[i].name)
+      html = this.replaceContent(html, page.content[i].name, page.content[i].html)
+    }
   }
   return html
+}
+
+processor.replaceContent = function(html, name, content) {
+  name = name.toUpperCase()
+  return html.replace(`<%CONTENT(${name})%>`, content)
 }
 
 /*

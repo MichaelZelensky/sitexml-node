@@ -37,7 +37,15 @@ sitexml.getPageById = function(id){
   var page = this.getPageNodeById(id)
   var title = this.getPageTitle(page)
   var sitename = this.getSiteName(page)
-  return this.processor.processPage({title, sitename})
+  var content = []
+  var cs = page.getElementsByTagName('content')
+  for (var i = 0; i < cs.length; i++) {
+    content.push({
+      name: cs[i].getAttribute('name'),
+      html: this.getContentNodeTextContent(cs[i])
+    })
+  }
+  return this.processor.processPage({title, sitename, content})
 }
 
 sitexml.getPageTitle = function(node) {
@@ -65,12 +73,18 @@ sitexml.getContentNodeByNameAndPageId = function (name, id) {
 
 sitexml.getContentNodeTextContent = function(c){
   if (c) {
-    var filename = c.textContent
-    var fullpath = Path.join(__dirname, this.path, '/.content/' + filename )
-    if (fs.existsSync(fullpath))
-      return fs.readFileSync(fullpath)
-    else
-      return "error:  content file "+ filename +" doesn't exist"
+    var type = c.getAttribute('type')
+    if (type == 'module') {
+      return "[ Module " + c.getAttribute('name') + ' ]'
+    } else {
+      var filename = c.textContent
+      var fullpath = Path.join(__dirname, this.path, '/.content/' + filename )
+      //console.log(c.getAttribute('id'), fullpath)
+      if (fs.existsSync(fullpath))
+        return fs.readFileSync(fullpath)
+      else
+        return "error:  content file "+ filename +" doesn't exist"
+    }
   } else {
     return "error:  content node is not specified"
   }
