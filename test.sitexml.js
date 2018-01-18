@@ -141,7 +141,7 @@ test(function(t) {
   var html = "abc <%THEME_PATH%> ghi"
   var string = "/some_/path/"
   var newHtml = sitexml.processor.replaceThemePath(html, string)
-  var htmlCheck = "abc /some_/path/ ghi"
+  var htmlCheck = "abc /.themes/some_/path/ ghi"
   t.is(newHtml, htmlCheck, "replaceThemePath 1")
 })
 

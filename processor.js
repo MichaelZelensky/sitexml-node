@@ -59,6 +59,7 @@ processor.normalizeThemeHtml = function(html){
 processor.replaceThemePath = function(html, string){
   if (!string.match(/^\//)) string = "/" + string;
   if (!string.match(/\/$/)) string = string + "/";
+  string = "/.themes" + string
   return html.replace(/<%THEME_PATH%>/g, string)
 }
 
