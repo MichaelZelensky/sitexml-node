@@ -34,6 +34,7 @@ app.get('*', function(req, res, next) {
     if (query.name !== undefined) {
       var html = sitexml.getContentByNameAndPageId(query.name, query.id)
     } else {
+      sitexml.currentPID = query.id
       var html = sitexml.getPageById(query.id)
     }
     res.set('Content-Type', 'text/html')
@@ -47,6 +48,7 @@ app.get('*', function(req, res, next) {
   } else {
     var page = sitexml.getPageNodeByAlias(pathname)
     if (page) {
+      sitexml.currentPID = page.getAttribute('id')
       var html = sitexml.getPageHTMLByPageNode(page)
       res.set('Content-Type', 'text/html')
       res.send(html)
