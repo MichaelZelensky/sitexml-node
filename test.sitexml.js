@@ -139,9 +139,9 @@ test(function(t) {
 //replaceThemePath
 test(function(t) {
   var html = "abc <%THEME_PATH%> ghi"
-  var string = "/some_path/"
+  var string = "/some_/path/"
   var newHtml = sitexml.processor.replaceThemePath(html, string)
-  var htmlCheck = "abc /some_path/ ghi"
+  var htmlCheck = "abc /some_/path/ ghi"
   t.is(newHtml, htmlCheck, "replaceThemePath 1")
 })
 
@@ -195,6 +195,13 @@ test(function(t){
 test(function(t){
   var theme = sitexml.getDefaultTheme()
   t.is(theme.getAttribute('id'), 3, 'getDefaultTheme 1')
+})
+
+//getPageThemeNode
+test(function(t){
+  var page = sitexml.getPageNodeById(10)
+  var themeNode = sitexml.getPageThemeNode(page)
+  t.is(themeNode.getAttribute('id'), 3, 'getPageThemeNode 1')
 })
 
 //end and print stats

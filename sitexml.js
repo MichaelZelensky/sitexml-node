@@ -39,9 +39,11 @@ sitexml.getPageById = function(id){
 }
 
 sitexml.getPageHTMLByPageNode = function(page){
-  var themeHtml = this.getPageThemeHtml(page)
+  var themeHtml = this.getPageThemeHtml(page) //first time selecting theme
+  var themeNode = this.getPageThemeNode(page) //second time selecting theme (might need to refactor)
   var title = this.getPageTitle(page)
   var sitename = this.getSiteName(page)
+  var themePath = themeNode.getAttribute('dir')
   var content = []
   var cs = page.getElementsByTagName('content')
   for (var i = 0; i < cs.length; i++) {
@@ -50,12 +52,21 @@ sitexml.getPageHTMLByPageNode = function(page){
       html: this.getContentNodeTextContent(cs[i])
     })
   }
-  return this.processor.processPage({title, sitename, content})
+  return this.processor.processPage({title, sitename, content, themeHtml, themePath})
 }
 
-sitexml.getPageThemeHtml = function(node) {
-  var themeId = node.getAttribute('theme')
-  var themeNode = (themeId) ? sitexml.getThemeById(theme) : sitexml.getDefaultTheme()
+sitexml.getPageThemeNode = function (pageNode) {
+  //console.log("pageNode", pageNode)
+  var themeId = pageNode.getAttribute('theme')
+  var themeNode = (themeId) ? sitexml.getThemeById(themeId) : sitexml.getDefaultTheme()
+  return themeNode
+}
+
+sitexml.getPageThemeHtml = function(pageNode) {
+  var themeNode = this.getPageThemeNode(pageNode)
+  //console.log('theme selected: ', themeNode.getAttribute('id'))
+  var themeHtml = sitexml.getThemeHTML(themeNode)
+  return themeHtml
 }
 
 sitexml.getDefaultTheme = function(node) {
@@ -67,6 +78,17 @@ sitexml.getDefaultTheme = function(node) {
     }
   }
   return theme
+}
+
+sitexml.getThemeHTML = function(node) {
+  if (!node) return "error: theme node is not specified"
+  var path = node.getAttribute('dir')
+  var filename = node.getAttribute('file')
+  var fullpath = Path.join(__dirname, this.path, `/.themes/${path}/${filename}` )
+  if (fs.existsSync(fullpath))
+    return fs.readFileSync(fullpath, {encoding: this.encoding})
+  else
+    return "error: theme file " + `${path}/${filename}` + " doesn't exists"
 }
 
 sitexml.getPageTitle = function(node) {
@@ -102,7 +124,7 @@ sitexml.getContentNodeTextContent = function(c){
       var fullpath = Path.join(__dirname, this.path, '/.content/' + filename )
       //console.log(c.getAttribute('id'), fullpath)
       if (fs.existsSync(fullpath))
-        return fs.readFileSync(fullpath)
+        return fs.readFileSync(fullpath, {encoding: this.encoding})
       else
         return "error:  content file "+ filename +" doesn't exist"
     }
@@ -142,17 +164,6 @@ sitexml.getElementById = function (name, id, parent) {
   var elements = parent.getElementsByTagName(name)
   for (var i = 0; i < elements.length; i++)
     if (elements[i].getAttribute('id') == id) return elements[i]
-}
-
-sitexml.getThemeHTML = function(node) {
-  if (!node) return "error: theme node is not specified"
-  var path = node.getAttribute('dir')
-  var filename = node.getAttribute('file')
-  var fullpath = Path.join(__dirname, this.path, `/.themes/${path}/${filename}` )
-  if (fs.existsSync(fullpath))
-    return fs.readFileSync(fullpath)
-  else
-    return "error: theme file " + `${path}/${filename}` + " doesn't exists"
 }
 
 sitexml.getSiteXML = function() {
