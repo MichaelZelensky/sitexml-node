@@ -13,7 +13,9 @@
         <content id="24" name="footer_right">footer_right.html</content>
         <content id="25" name="footer_left">footer_left.html</content>
     </theme>
-    <theme id="4" file="index.thm" dir="book" name="Book"/>
+    <theme id="4" file="index.thm" dir="book" name="Book">
+      <meta name="keywords" content="sitexml book"/>
+    </theme>
     <page theme="1" id="8" name="Start" nonavi="yes" startpage="yes"
           title="SiteXML - extending the architecture of the WWW">
         <meta name="keywords">sitexml website standard frontend-backend protocol</meta>

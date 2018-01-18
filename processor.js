@@ -16,6 +16,7 @@ processor.processPage = function(page){
   if (page.title) html = this.replaceTitle(html, page.title)
   if (page.sitename) html = this.replaceSiteName(html, page.sitename)
   if (page.themePath) html = this.replaceThemePath(html, page.themePath)
+  if (page.meta) html = this.replaceMeta(html, page.meta)
   if (page.content) for (var i = 0; i < page.content.length; i++) {
     //console.log(page.content[i].name)
     html = this.replaceContent(html, page.content[i].name, page.content[i].html)

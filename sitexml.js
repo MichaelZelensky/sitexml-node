@@ -53,12 +53,17 @@ sitexml.getPageHTMLByPageNode = function(page){
       html: this.getContentNodeTextContent(cs[i])
     })
   }
+  var metas = themeNode.getElementsByTagName('meta')
+  for (var i = 0; i < metas.length; i++) {
+    var string = this.getMetaHtmlByNode(metas[i])
+    meta.push(string)
+  }
   var metas = page.getElementsByTagName('meta')
   for (var i = 0; i < metas.length; i++) {
     var string = this.getMetaHtmlByNode(metas[i])
     meta.push(string)
   }
-  return this.processor.processPage({title, sitename, content, themeHtml, themePath})
+  return this.processor.processPage({title, sitename, content, themeHtml, themePath, meta})
 }
 
 sitexml.getMetaHtmlByNode = function (metaNode) {
@@ -73,8 +78,9 @@ sitexml.getMetaHtmlByNode = function (metaNode) {
     string += 'scheme="' + metaNode.getAttribute('scheme') + '"'
   if (metaNode.getAttribute('content'))
     string += ' content="' + metaNode.getAttribute('content') + '"'
+  else if (metaNode.textContent)
+    string += ' content="' + metaNode.textContent + '"'
   string += ">"
-  string += metaNode.textContent
   string += '</meta>'
   return string
 }
