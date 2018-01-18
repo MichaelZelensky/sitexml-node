@@ -82,4 +82,9 @@ processor.replaceContent = function(html, name, content) {
   return html.replace(`<%CONTENT(${name})%>`, content)
 }
 
+processor.replaceMeta = function(html, strings) {
+  var metas = strings.join('\n')
+  return html.replace(`<%META%>`, metas)
+}
+
 module.exports = processor

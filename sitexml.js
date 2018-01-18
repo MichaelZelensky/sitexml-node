@@ -45,6 +45,7 @@ sitexml.getPageHTMLByPageNode = function(page){
   var sitename = this.getSiteName(page)
   var themePath = themeNode.getAttribute('dir')
   var content = []
+  var meta = []
   var cs = page.getElementsByTagName('content')
   for (var i = 0; i < cs.length; i++) {
     content.push({
@@ -52,7 +53,30 @@ sitexml.getPageHTMLByPageNode = function(page){
       html: this.getContentNodeTextContent(cs[i])
     })
   }
+  var metas = page.getElementsByTagName('meta')
+  for (var i = 0; i < metas.length; i++) {
+    var string = this.getMetaHtmlByNode(metas[i])
+    meta.push(string)
+  }
   return this.processor.processPage({title, sitename, content, themeHtml, themePath})
+}
+
+sitexml.getMetaHtmlByNode = function (metaNode) {
+  var string = '<meta '
+  if (metaNode.getAttribute('name'))
+    string += 'name="' + metaNode.getAttribute('name') + '"'
+  else if (metaNode.getAttribute('charset'))
+    string += 'charset="' + metaNode.getAttribute('charset') + '"'
+  else if (metaNode.getAttribute('http-equiv'))
+    string += 'http-equiv="' + metaNode.getAttribute('http-equiv') + '"'
+  else if (metaNode.getAttribute('scheme'))
+    string += 'scheme="' + metaNode.getAttribute('scheme') + '"'
+  if (metaNode.getAttribute('content'))
+    string += ' content="' + metaNode.getAttribute('content') + '"'
+  string += ">"
+  string += metaNode.textContent
+  string += '</meta>'
+  return string
 }
 
 sitexml.getPageThemeNode = function (pageNode) {

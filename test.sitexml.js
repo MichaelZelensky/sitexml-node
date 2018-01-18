@@ -199,12 +199,46 @@ test(function(t){
 
 //getPageThemeNode
 test(function(t){
-  var page = sitexml.getPageNodeById(10)
+  var page = sitexml.getPageNodeById(29)
   var themeNode = sitexml.getPageThemeNode(page)
-  t.is(themeNode.getAttribute('id'), 3, 'getPageThemeNode 1')
+  t.is(themeNode.getAttribute('id'), 4, 'getPageThemeNode 1')
+})
+
+//sitexml.getMetaHtmlByNode
+test(function(t){
+  var pageNode = sitexml.getElementById('page', 29)
+  var metas = pageNode.getElementsByTagName('meta')
+  var checkHtml = [
+    '<meta name="description">Special page with content file missing, for test reasons</meta>',
+    '<meta charset="utf-8"></meta>',
+    '<meta name="keywords" content="test1, test2, test3"></meta>',
+    '<meta name="description" content="Special page with content file missing, for test reasons"></meta>'
+  ]
+  var html = [
+    sitexml.getMetaHtmlByNode(metas[0]),
+    sitexml.getMetaHtmlByNode(metas[1]),
+    sitexml.getMetaHtmlByNode(metas[2]),
+    sitexml.getMetaHtmlByNode(metas[3])
+  ]
+  var i = 0;
+  t.is(html[0], checkHtml[0], 'sitexml.getMetaHtmlByNode' + (++i))
+  t.is(html[1], checkHtml[1], 'sitexml.getMetaHtmlByNode' + (++i))
+  t.is(html[2], checkHtml[2], 'sitexml.getMetaHtmlByNode' + (++i))
+  t.is(html[3], checkHtml[3], 'sitexml.getMetaHtmlByNode' + (++i))
+})
+
+//processor.replaceMeta
+test(function(t) {
+  var pageNode = sitexml.getElementById('page', 29)
+  var metas = pageNode.getElementsByTagName('meta')
+  var metaHtml = sitexml.getMetaHtmlByNode(metas[0])
+  var html = "abc <%META%> def"
+  var newHtml = sitexml.processor.replaceMeta(html, [metaHtml])
+  var checkHtml = 'abc <meta name="description">Special page with content file missing, for test reasons</meta> def'
+  t.is(checkHtml, newHtml, 'processor.replaceMeta 1')
 })
 
 //end and print stats
-test(function(t){
+test(function(t) {
   t.end();
 });

@@ -75,8 +75,11 @@
     <page id="28" title="Книга SiteXML и Элементарная теория сайтов" nonavi="yes" alias="sitexmlbook" name="Книга" theme="4">
         <content id="28" name="main">sitexmlbook.ru.html</content>
     </page>
-    <page id="29" nonavi="yes" alias="test/nocontent" name="noname">
+    <page id="29" nonavi="yes" alias="test/nocontent" name="noname" theme="4">
       <meta name="description">Special page with content file missing, for test reasons</meta>
+      <meta charset="utf-8"/>
+      <meta name="keywords" content="test1, test2, test3"/>
+      <meta name="description" content="Special page with content file missing, for test reasons"/>
       <content id="30" name="main">not_existing.html</content>
       <content id="31" name="main">test_string.html</content>
     </page>
