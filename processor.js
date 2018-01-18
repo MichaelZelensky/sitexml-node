@@ -17,6 +17,7 @@ processor.processPage = function(page){
   if (page.sitename) html = this.replaceSiteName(html, page.sitename)
   if (page.themePath) html = this.replaceThemePath(html, page.themePath)
   if (page.meta) html = this.replaceMeta(html, page.meta)
+  if (page.navi) html = this.replaceNavi(html, page.navi)
   if (page.content) for (var i = 0; i < page.content.length; i++) {
     //console.log(page.content[i].name)
     html = this.replaceContent(html, page.content[i].name, page.content[i].html)
@@ -86,6 +87,10 @@ processor.replaceContent = function(html, name, content) {
 processor.replaceMeta = function(html, strings) {
   var metas = strings.join('\n')
   return html.replace(`<%META%>`, metas)
+}
+
+processor.replaceNavi = function (html, naviHtml) {
+  return html.replace(`<%NAVI%>`, naviHtml)
 }
 
 module.exports = processor

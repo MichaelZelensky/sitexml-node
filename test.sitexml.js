@@ -209,7 +209,7 @@ test(function(t){
   var pageNode = sitexml.getElementById('page', 29)
   var metas = pageNode.getElementsByTagName('meta')
   var checkHtml = [
-    '<meta name="description">Special page with content file missing, for test reasons</meta>',
+    '<meta name="description" content="Special page with content file missing, for test reasons"></meta>',
     '<meta charset="utf-8"></meta>',
     '<meta name="keywords" content="test1, test2, test3"></meta>',
     '<meta name="description" content="Special page with content file missing, for test reasons"></meta>'
@@ -234,8 +234,23 @@ test(function(t) {
   var metaHtml = sitexml.getMetaHtmlByNode(metas[0])
   var html = "abc <%META%> def"
   var newHtml = sitexml.processor.replaceMeta(html, [metaHtml])
-  var checkHtml = 'abc <meta name="description">Special page with content file missing, for test reasons</meta> def'
+  var checkHtml = 'abc <meta name="description" content="Special page with content file missing, for test reasons"></meta> def'
   t.is(checkHtml, newHtml, 'processor.replaceMeta 1')
+})
+
+//getNaviHtml
+test(function(t) {
+  //console.log(sitexml.getNaviHtml())
+  t.is(true, false, "getNaviHtml")
+})
+
+//processor.replaceNavi
+test(function(t) {
+  var html = "abc <%NAVI%> def"
+  var navi = '<li href="test_navi"/>'
+  var checkHtml = 'abc <li href="test_navi"/> def'
+  var newHtml = sitexml.processor.replaceNavi(html, navi)
+  t.is(checkHtml, newHtml, "processor.replaceNavi")
 })
 
 //end and print stats

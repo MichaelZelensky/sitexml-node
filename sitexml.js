@@ -9,7 +9,9 @@ var sitexml = {
   xml: '',
   encoding: "utf8",
   xmldoc: null,
-  processor
+  processor,
+  currentPID: null,
+  basePath: null
 }
 
 sitexml.init = function(){
@@ -46,6 +48,7 @@ sitexml.getPageHTMLByPageNode = function(page){
   var themePath = themeNode.getAttribute('dir')
   var content = []
   var meta = []
+  var navi = this.getNaviHtml()
   var cs = page.getElementsByTagName('content')
   for (var i = 0; i < cs.length; i++) {
     content.push({
@@ -63,7 +66,7 @@ sitexml.getPageHTMLByPageNode = function(page){
     var string = this.getMetaHtmlByNode(metas[i])
     meta.push(string)
   }
-  return this.processor.processPage({title, sitename, content, themeHtml, themePath, meta})
+  return this.processor.processPage({title, sitename, content, themeHtml, themePath, meta, navi})
 }
 
 sitexml.getMetaHtmlByNode = function (metaNode) {
@@ -83,6 +86,35 @@ sitexml.getMetaHtmlByNode = function (metaNode) {
   string += ">"
   string += '</meta>'
   return string
+}
+
+sitexml.getNaviHtml = function(node, maxlevel = 0, level = 0) {
+  level++;
+  if (!node) node = this.xmldoc.getElementsByTagName('site')[0];
+  var html = '';
+  if (!maxlevel || maxlevel >= level) {
+    var pages = node.getElementsByTagName('page')
+    var page, liclass, href, contentNodes, pid, name
+    for (var i = 0; i < pages.length; i++) {
+      page = pages[i]
+      if (page.getAttribute('nonavi') == "yes") continue
+      pid = page.getAttribute('id')
+      liclass = (pid == this.currentPID) ? ' class="siteXML-current"' : ''
+      href = (page.getAttribute("alias")) ? '/' + page.getAttribute('alias') : '/?id=' . pid
+      if (this.basePath) href = '/' + this.basePath + href
+      contentNodes = page.getElementsByTagName('content')
+      name = page.getAttribute('name') || "page" + pid
+      if (contentNodes.length) {
+        html += '<li' + liclass + ' pid="' + pid + '"><a href="' + href + '" pid="' + pid + '">' + name + '</a>';
+      } else {
+        html += '<li' + liclass + 'pid="' + pid + '">' + name + '';
+      }
+      html += this.getNaviHtml(page, maxlevel, level)
+      html += '</li>';
+    }
+    if (html != '') html = `<ul class="siteXML-navi level-${level}">${html}</ul>`;
+  }
+  return html;
 }
 
 sitexml.getPageThemeNode = function (pageNode) {
