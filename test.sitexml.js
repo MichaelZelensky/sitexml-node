@@ -240,8 +240,8 @@ test(function(t) {
 
 //getNaviHtml
 test(function(t) {
-  //console.log(sitexml.getNaviHtml())
-  t.is(true, false, "getNaviHtml")
+  var navi = sitexml.getNaviHtml()
+  t.is(typeof navi, 'string', "getNaviHtml")
 })
 
 //processor.replaceNavi
