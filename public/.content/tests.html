@@ -1,0 +1,66 @@
+<style>
+.mztest-passed {
+  color: #00c500;
+}
+.mztest-failed {
+  color: #F00;
+}
+.mztest-container {
+  margin: 10px 0;
+}
+.mztest-container span {
+  padding: 0 6px 0 0;
+}
+</style>
+<h1>SiteXML tests</h1>
+<div id="test_container">
+</div>
+<script>
+var mztest = {
+  total : 0,
+  passed : 0
+}
+mztest.is = function(a, b) {
+  this.total = this.total + 1
+  var container = this.addContainer()
+  this.writeContainer(container, `Test ${this.total} ${this.label}`)
+  if (a == b) {
+    this.writeContainer(container, `Passed`, 'mztest-passed')
+    this.passed++
+  } else {
+    this.writeContainer(container, `Failed`, 'mztest-failed')
+  }
+}
+mztest.end = function(){
+  var container = this.addContainer()
+  this.writeContainer(container, `Passed ${this.passed}/${this.total}`)
+}
+mztest.addContainer = function() {
+  var container = document.createElement('div')
+  container.id = "mztest-"
+  container.className = "mztest-container"
+  document.getElementById('test_container').append(container)
+  return container
+}
+
+mztest.writeContainer = function(container, msg, className = '') {
+  var p = document.createElement('span')
+  p.className = className
+  p.innerHTML = msg
+  container.append(p)
+}
+var test = function(fn, label = '') {
+  mztest.label = label
+  fn(mztest)
+}
+
+test(function(t){
+  console.log('lets try')
+  t.is(1,1)
+  t.is(0.1)
+}, 'First test')
+
+test(function(t){
+  t.end()
+})
+</script>

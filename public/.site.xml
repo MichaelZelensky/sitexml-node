@@ -85,4 +85,7 @@
       <content id="30" name="main">not_existing.html</content>
       <content id="31" name="main">test_string.html</content>
     </page>
+    <page name="Tests" id="30" alias="tests">
+      <content id="32" name="main">tests.html</content>
+    </page>
 </site>

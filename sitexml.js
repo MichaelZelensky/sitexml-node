@@ -1,7 +1,9 @@
 var fs = require('fs')
 var Path = require('path')
+var express = require('express')
 var DOMParser = require('xmldom').DOMParser
 var processor = require('./processor.js')
+var url = require('url')
 
 var sitexml = {
   filename: '.site.xml',
@@ -11,10 +13,16 @@ var sitexml = {
   xmldoc: null,
   processor,
   currentPID: null,
-  basePath: null
+  basePath: null,
+  publicDir: 'public',
+  sitexml,
+  url,
+  path: Path
 }
 
-sitexml.init = function(){
+sitexml.init = function(opt = {}){
+  if (opt.publicDir) this.publicDir = opt.publicDir
+  this.setPath(this.publicDir)
   return this
 }
 
@@ -40,7 +48,7 @@ sitexml.getPageById = function(id){
   return this.getPageHTMLByPageNode(page);
 }
 
-sitexml.getPageHTMLByPageNode = function(page){
+sitexml.getPageHTMLByPageNode = function(page) {
   var themeHtml = this.getPageThemeHtml(page) //first time selecting theme
   var themeNode = this.getPageThemeNode(page) //second time selecting theme (might need to refactor)
   var title = this.getPageTitle(page)
@@ -246,6 +254,104 @@ sitexml.setPath = function(path) {
   } else {
     this.path = path
   }
+}
+
+sitexml.handler = function(req, res, next) {
+  var sitexml = require('./sitexml')
+  var path = require('path')
+  var url = sitexml.url
+  var url_parts = url.parse(req.url, true)
+  var pathname = url_parts.pathname
+  var query = url_parts.query
+  var html
+
+  // STP GET
+
+  if (req.method == "GET") {
+
+    //?xml
+    if (query.xml !== undefined) {
+      xml = sitexml.getSiteXML()
+      res.set({'Content-Type': 'text/xml'})
+      res.send(xml)
+    } else
+
+    //?id=X
+    if (query.id !== undefined) {
+      if (query.name !== undefined) {
+        html = sitexml.getContentByNameAndPageId(query.name, query.id)
+      } else {
+        sitexml.currentPID = query.id
+        html = sitexml.getPageById(query.id)
+      }
+      res.set('Content-Type', 'text/html')
+      res.send(html)
+    } else
+
+    //?cid=X
+    if (query.cid !== undefined) {
+      html = sitexml.getContentNodeTextContent(sitexml.getContentNodeById(query.cid))
+      res.set('Content-Type', 'text/html')
+      res.send(html)
+    } else
+
+    //?login
+    if (query.login !== undefined) {
+      html = fs.readFileSync(path.join(__dirname, '_login.html'))
+      res.set('Content-Type', 'text/html')
+      res.send(html)
+    } else
+
+    //?logout
+    if (query.logout !== undefined) {
+      html = 'logged out'
+      res.set('Content-Type', 'text/html')
+      res.send(html)
+    } else
+
+    //all other
+    {
+      var page = sitexml.getPageNodeByAlias(pathname)
+      if (page) {
+        sitexml.currentPID = page.getAttribute('id')
+        html = sitexml.getPageHTMLByPageNode(page)
+        res.set('Content-Type', 'text/html')
+        res.send(html)
+      }
+    }
+  } else
+
+  //STP POST
+  if (req.method == "POST") {
+    //?login
+    if (query.login !== undefined) {
+      console.log('POST ?login')
+      var success = sitexml.setSession(login, password)
+      if (success) {
+        html = "Login sent"
+      } else
+      res.set('Content-Type', 'text/html')
+      res.send(html)
+    } else
+
+    // ?cid
+    if (query.cid !== undefined) {
+      console.log('POST ?cid')
+      var html = "content sent"
+      res.set('Content-Type', 'text/html')
+      res.send(html)
+    } else
+
+    // ?xml
+    if (query.xml !== undefined) {
+      console.log('POST ?xml')
+      var html = "XML sent"
+      res.set('Content-Type', 'text/html')
+      res.send(html)
+    }
+  }
+
+  next()
 }
 
 module.exports = sitexml.init()
