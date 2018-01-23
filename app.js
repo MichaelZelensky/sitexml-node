@@ -7,14 +7,14 @@ const app = express()
 
 const port = 80
 
-app.use(express.static(path.join(__dirname, 'public'), {dotfiles: 'allow'}))
-sitexml.setPath('public')
-
 //error
 app.use(function(err, req, res, next) {
   console.error(err.stack)
   res.status(500).send('Something broke!')
 });
+
+app.use(express.static(path.join(__dirname, 'public'), {dotfiles: 'allow'}))
+sitexml.setPath('public')
 
 // STP GET
 app.get('*', function(req, res, next) {
@@ -41,11 +41,15 @@ app.get('*', function(req, res, next) {
     res.send(html)
   } else
 
+  //?cid=X
   if (query.cid !== undefined) {
     var html = sitexml.getContentNodeTextContent(sitexml.getContentNodeById(query.cid))
     res.set('Content-Type', 'text/html')
     res.send(html)
-  } else {
+  } else
+
+
+  {
     var page = sitexml.getPageNodeByAlias(pathname)
     if (page) {
       sitexml.currentPID = page.getAttribute('id')
