@@ -14,7 +14,7 @@ var sitexml = {
   processor,
   currentPID: null,
   basePath: null,
-  publicDir: 'public',
+  publicDir: '../../public',
   silentMode: false,
   sitexml,
   url,
