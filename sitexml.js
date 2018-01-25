@@ -296,7 +296,7 @@ sitexml.setPath = function(path) {
   var fullpath = Path.join(__dirname, path, this.filename)
   if (!fs.existsSync(fullpath)) {
     this.error(`Path doesn't exist (${fullpath})`)
-    process.exit()
+    //process.exit()
   } else {
     this.path = path
   }

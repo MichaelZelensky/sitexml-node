@@ -1,0 +1,92 @@
+<site name="SiteXML - website architecture standard">
+    <meta name="keywords">sitexml</meta>
+    <theme file="test.thm" id="99" dir="test"/>
+    <theme file="index.thm" id="1" dir="byYaroslav" name="byYaroslav">
+        <content name="header" id="9">header.html</content>
+        <content name="footer" id="10" params="abc">footer.html</content>
+    </theme>
+    <theme file="index.thm" id="2" dir="theme16" name="theme16">
+        <content name="header" id="19">header.html</content>
+        <content name="footer" id="20">footer.html</content>
+    </theme>
+    <theme id="3" dir="byYaroslav" file="page.thm" name="byYaroslav (page)" default="yes">
+        <content id="24" name="footer_right">footer_right.html</content>
+        <content id="25" name="footer_left">footer_left.html</content>
+    </theme>
+    <theme id="4" file="index.thm" dir="book" name="Book">
+        <meta name="keywords" content="sitexml book"/>
+    </theme>
+    <page theme="1" id="8" name="Start" nonavi="yes" startpage="yes"
+          title="SiteXML - extending the architecture of the WWW">
+        <meta name="keywords">sitexml website standard frontend-backend protocol</meta>
+        <meta name="description">SiteXML is a content website server standard and website frontend-backend protocol
+        </meta>
+        <content id="8" name="main" theme="1">start.html</content>
+        <content id="21" name="example">start_example.html</content>
+        <content id="22" name="thesis">start_thesis.html</content>
+        <content id="23" name="navi" type="module"/>
+    </page>
+    <page id="1" name="Introduction" title="SiteXML intro" alias="foreword">
+        <content id="1" name="main">preface.html</content>
+    </page>
+    <page id="27" name="A Website" title="A Website definition" alias="website">
+        <content id="27" name="main">website.html</content>
+    </page>
+    <page id="4" name="Architecture" alias="architecture" title="SiteXML architecture">
+        <content id="4" name="main">architecture.html</content>
+    </page>
+    <page id="6" name="Hello World!" alias="hello-world" title="SiteXML Hello World! example" nonavi="yes">
+        <content id="6" name="main">helloworld.html</content>
+    </page>
+    <page id="7" name="API" alias="api" title="SiteXML API">
+        <content id="7" name="main">reference.html</content>
+    </page>
+    <page id="9" name="Download" alias="download" title="SiteXML Download">
+        <content id="11" name="main">download.html</content>
+    </page>
+    <page id="10" name="In Depth" alias="in-depth" title="SiteXML in depth" nonavi="yes">
+        <content id="12" name="main">indepth.html</content>
+    </page>
+    <page id="11" name="Collaborate" alias="collaborate" title="SiteXML collaborate">
+        <content id="13" name="main">collaborate.html</content>
+    </page>
+    <page id="12" name="SiteXML configuration" alias="configuration" title="SiteXML configuration" nonavi="yes">
+        <content id="14" name="main">config.html</content>
+    </page>
+    <page id="13" name="Ajax-browsing" alias="ajaxbrowsing" title="Ajax-browsing" nonavi="yes">
+        <content id="15" name="main">ajax-browsing.html</content>
+    </page>
+    <page id="14" name="About the site" alias="about" title="About SiteXML" nonavi="yes">
+        <content id="16" name="main">about.html</content>
+    </page>
+    <page id="15" name="About" alias="about" title="SiteXML team" nonavi="yes">
+        <content id="17" name="main">team.html</content>
+    </page>
+    <page id="16" name="License" alias="license" title="SiteXML license" nonavi="yes">
+        <content id="18" name="main">license.html</content>
+    </page>
+    <page id="17" name="sitexml.js" alias="sitexml.js" title="sitexml.js" nonavi="yes">
+        <content id="19" name="main">sitexml.js.html</content>
+    </page>
+    <page id="18" name="SiteXML CMS" alias="SitexmlCMS" title="SiteXML CMS" nonavi="yes">
+        <content id="20" name="main">sitexmlCMS.html</content>
+    </page>
+    <page id="19" name="SiteXML Engine algorithms" alias="algorithms" title="SiteXML algorithms" nonavi="yes">
+        <content id="26" name="main">algorithms.html</content>
+    </page>
+    <page id="28" title="Книга SiteXML и Элементарная теория сайтов" nonavi="yes" alias="sitexmlbook" name="Книга"
+          theme="4">
+        <content id="28" name="main">sitexmlbook.ru.html</content>
+    </page>
+    <page id="29" nonavi="yes" alias="test/nocontent" name="noname" theme="4">
+        <meta name="description">Special page with content file missing, for test reasons</meta>
+        <meta charset="utf-8"/>
+        <meta name="keywords" content="test1, test2, test3"/>
+        <meta name="description" content="Special page with content file missing, for test reasons"/>
+        <content id="30" name="main">not_existing.html</content>
+        <content id="31" name="main">test_string.html</content>
+    </page>
+    <page name="Tests" id="30" alias="tests">
+        <content id="32" name="main">tests.html</content>
+    </page>
+</site>

@@ -4,7 +4,7 @@
   "description": "SiteXML Core",
   "main": "sitexml",
   "scripts": {
-    "test": "node test.sitexml"
+    "test": "node tests/test.sitexml"
   },
   "author": "Michael Zelensky",
   "license": "MIT",

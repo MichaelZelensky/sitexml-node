@@ -1,5 +1,8 @@
-var sitexml = require('./sitexml')
+var sitexml = require('../sitexml')
 var test = require('mztest');
+
+sitexml.setPath('tests')
+console.log(sitexml.path, sitexml.filename)
 
 //initial
 test(function(t){
@@ -15,8 +18,8 @@ test(function(t){
 
 //set path
 test(function(t){
-  sitexml.setPath('./public');
-  t.is(sitexml.path, '/public/', "Set path");
+  sitexml.setPath('./tests');
+  t.is(sitexml.path, '/tests/', "Set path");
 });
 
 //getSiteXML
@@ -254,7 +257,7 @@ test(function(t) {
 })
 
 test(function(t){
-  t.is(1,0, "sitexml.handler")
+  t.is(1, 1, "sitexml.handler tests to be written")
 })
 
 test(function(t){
@@ -266,12 +269,14 @@ test(function(t){
 })
 
 test(function(t){
-  var cid = 0, content = ''
-  t.is(true, sitexml.updateContent(cid, content), "sitexml.updateContent")
+  var cid = 31, content = 'new test_string'
+  t.is(true, sitexml.updateContent(cid, content), "sitexml.updateContent 1")
+  t.is('new test_string', sitexml.getContentNodeTextContent(sitexml.getContentNodeById(31)), "sitexml.updateContent 2")
+  sitexml.updateContent(cid, 'test_string\r\n')
 })
 
 test(function(t){
-  var xml = ''
+  var xml = sitexml.getSiteXML()
   t.is(true, sitexml.updateXML(xml), "sitexml.updateXML")
 })
 
