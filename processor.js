@@ -1,9 +1,11 @@
 var fs = require('fs')
+var path = require('path')
+
 var processor = {
   encoding: "utf8"
 }
 
-processor.defaultThemeHtml = fs.readFileSync('./_default_theme.thm', processor.encoding)
+processor.defaultThemeHtml = fs.readFileSync(path.join(__dirname, '/_default_theme.thm'), processor.encoding)
 
 /*
 @returns {String} - final HTML of the page
