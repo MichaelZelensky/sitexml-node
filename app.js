@@ -12,8 +12,13 @@ app.use(function(err, req, res, next) {
   res.status(500).send('Something broke!')
 });
 
+/* SitexML */
+
+app.use(express.urlencoded({extended:true}))
 app.use(express.static(path.join(__dirname, 'public'), {dotfiles: 'allow'}))
 app.use(sitexml.handler)
+
+/* end SiteXML*/
 
 app.listen(port)
 console.log(`Listening to port ${port}`)

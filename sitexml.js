@@ -15,6 +15,7 @@ var sitexml = {
   currentPID: null,
   basePath: null,
   publicDir: 'public',
+  silentMode: false,
   sitexml,
   url,
   path: Path
@@ -24,6 +25,10 @@ sitexml.init = function(opt = {}){
   if (opt.publicDir) this.publicDir = opt.publicDir
   this.setPath(this.publicDir)
   return this
+}
+
+sitexml.say = function(what) {
+  if (!this.silentMode) console.log(what)
 }
 
 sitexml.getSiteName = function(pageNode){
@@ -203,6 +208,26 @@ sitexml.getContentNodeTextContent = function(c){
   }
 }
 
+sitexml.saveContentNodeTextContent = function(c, content) {
+  if (c) {
+    var type = c.getAttribute('type')
+    if (type == 'module') {
+      return "error: content node is module type"
+    } else {
+      var filename = c.textContent
+      var fullpath = Path.join(__dirname, this.path, '/.content/' + filename )
+      if (fs.existsSync(fullpath)) {
+        fs.writeFileSync(fullpath, content, {encoding: this.encoding})
+        return true
+      } else {
+        return "error:  content file "+ filename +" doesn't exist"
+      }
+    }
+  } else {
+    return "error:  content node is not specified"
+  }
+}
+
 sitexml.getThemeById = function(id) {
   if (id == undefined) return "error: no theme id given"
   return this.getElementById('theme', id)
@@ -243,6 +268,27 @@ sitexml.getSiteXML = function() {
   return xml
 }
 
+sitexml.saveSiteXML = function(xml) {
+  var fullpath = Path.join(__dirname, this.path, this.filename)
+  if (this.siteXMLIsValid(xml)) {
+    fs.writeFileSync(fullpath, xml, this.encoding)
+    return true
+  } else {
+    this.error('xml is not valid')
+    return false
+  }
+}
+
+/*
+note:
+npm xmldoc library doesn't validate xml, you can feed it with anything
+so I am just checking the root element, which must be SITE
+*/
+sitexml.siteXMLIsValid = function (xml) {
+  var xmldoc = new DOMParser().parseFromString(xml)
+  return (xmldoc.childNodes['0'].nodeName == 'site')
+}
+
 sitexml.setPath = function(path) {
   path = path || this.path
   if (path.startsWith('./') || path.startsWith('.\\')) path = path.substring(1)
@@ -254,6 +300,28 @@ sitexml.setPath = function(path) {
   } else {
     this.path = path
   }
+}
+
+sitexml.setSession = function (login, password) {
+  return true
+}
+
+sitexml.checkSession = function () {
+  return true
+}
+
+sitexml.updateContent = function (cid, content) {
+  var res = this.saveContentNodeTextContent(this.getContentNodeById(cid), content)
+  if (res === true) {
+    return true;
+  } else {
+    sitexml.error(res);
+    return false;
+  }
+}
+
+sitexml.updateXML = function (xml) {
+  return this.saveSiteXML(xml)
 }
 
 sitexml.handler = function(req, res, next) {
@@ -269,9 +337,10 @@ sitexml.handler = function(req, res, next) {
 
   if (req.method == "GET") {
 
-    //?xml
-    if (query.xml !== undefined) {
+    //?sitexml
+    if (query.sitexml !== undefined) {
       xml = sitexml.getSiteXML()
+      sitexml.say("GET ?sitexml")
       res.set({'Content-Type': 'text/xml'})
       res.send(xml)
     } else
@@ -279,9 +348,11 @@ sitexml.handler = function(req, res, next) {
     //?id=X
     if (query.id !== undefined) {
       if (query.name !== undefined) {
+        sitexml.say(`GET ?id=${query.id}&name=${query.name}`)
         html = sitexml.getContentByNameAndPageId(query.name, query.id)
       } else {
         sitexml.currentPID = query.id
+        sitexml.say(`GET ?id=${query.id}`)
         html = sitexml.getPageById(query.id)
       }
       res.set('Content-Type', 'text/html')
@@ -290,6 +361,7 @@ sitexml.handler = function(req, res, next) {
 
     //?cid=X
     if (query.cid !== undefined) {
+      sitexml.say(`GET ?cid=${query.cid}`)
       html = sitexml.getContentNodeTextContent(sitexml.getContentNodeById(query.cid))
       res.set('Content-Type', 'text/html')
       res.send(html)
@@ -297,6 +369,7 @@ sitexml.handler = function(req, res, next) {
 
     //?login
     if (query.login !== undefined) {
+      sitexml.say(`GET ?login`)
       html = fs.readFileSync(path.join(__dirname, '_login.html'))
       res.set('Content-Type', 'text/html')
       res.send(html)
@@ -304,6 +377,7 @@ sitexml.handler = function(req, res, next) {
 
     //?logout
     if (query.logout !== undefined) {
+      sitexml.say(`GET ?logout`)
       html = 'logged out'
       res.set('Content-Type', 'text/html')
       res.send(html)
@@ -311,6 +385,7 @@ sitexml.handler = function(req, res, next) {
 
     //all other
     {
+      sitexml.say(`GET ${pathname}`)
       var page = sitexml.getPageNodeByAlias(pathname)
       if (page) {
         sitexml.currentPID = page.getAttribute('id')
@@ -325,27 +400,38 @@ sitexml.handler = function(req, res, next) {
   if (req.method == "POST") {
     //?login
     if (query.login !== undefined) {
-      console.log('POST ?login')
+      sitexml.say(`POST ?login=${req.body.login}`)
+      var login = req.body.login,      //
+          password = req.body.password //note: this requires app.use(express.urlencoded({extended:true})) in the main app file
       var success = sitexml.setSession(login, password)
       if (success) {
-        html = "Login sent"
+        html = "logged in"
       } else
       res.set('Content-Type', 'text/html')
       res.send(html)
     } else
 
     // ?cid
-    if (query.cid !== undefined) {
-      console.log('POST ?cid')
-      var html = "content sent"
+    if (req.body.cid !== undefined) {
+      sitexml.say(`POST ?cid=${req.body.cid}`)
+      var content = req.body.content
+      if (sitexml.updateContent(req.body.cid, content)) {
+        html = "content saved"
+      } else {
+        html = "error saving content"
+      }
       res.set('Content-Type', 'text/html')
       res.send(html)
     } else
 
     // ?xml
-    if (query.xml !== undefined) {
-      console.log('POST ?xml')
-      var html = "XML sent"
+    if (req.body.sitexml !== undefined) {
+      sitexml.say('POST ?sitexml')
+      if (sitexml.updateXML(req.body.sitexml)) {
+        html = "sitexml saved"
+      } else {
+        html = "error saving sitexml"
+      }
       res.set('Content-Type', 'text/html')
       res.send(html)
     }

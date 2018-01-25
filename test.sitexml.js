@@ -253,6 +253,33 @@ test(function(t) {
   t.is(checkHtml, newHtml, "processor.replaceNavi")
 })
 
+test(function(t){
+  t.is(1,0, "sitexml.handler")
+})
+
+test(function(t){
+  t.is(true, sitexml.setSession(), "sitexml.setSession")
+})
+
+test(function(t){
+  t.is(true, sitexml.checkSession(), "sitexml.checkSession")
+})
+
+test(function(t){
+  var cid = 0, content = ''
+  t.is(true, sitexml.updateContent(cid, content), "sitexml.updateContent")
+})
+
+test(function(t){
+  var xml = ''
+  t.is(true, sitexml.updateXML(xml), "sitexml.updateXML")
+})
+
+test(function(t){
+  var xml = '<site/>'
+  t.is(true, sitexml.siteXMLIsValid(xml), "sitexml.siteXMLIsValid")
+})
+
 //end and print stats
 test(function(t) {
   t.end();
