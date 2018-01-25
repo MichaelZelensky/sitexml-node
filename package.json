@@ -1,6 +1,6 @@
 {
   "name": "sitexml",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "SiteXML Core",
   "main": "sitexml",
   "scripts": {
