@@ -1,7 +1,7 @@
 {
   "name": "sitexml",
-  "version": "1.1.2",
-  "description": "SiteXML Core",
+  "version": "1.1.1",
+  "description": "SiteXML Core \n Instructions: https://github.com/MichaelZelensky/sitexml-node",
   "main": "sitexml",
   "scripts": {
     "test": "node tests/test.sitexml"
