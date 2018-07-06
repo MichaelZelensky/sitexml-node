@@ -440,4 +440,14 @@ sitexml.handler = function(req, res, next) {
   next()
 }
 
+sitexml.aliasIsValid = function(alias) {
+  return (
+    alias !== undefined
+    &&
+    alias !== ""
+    &&
+    alias !== null
+  )
+}
+
 module.exports = sitexml.init()

@@ -285,6 +285,15 @@ test(function(t){
   t.is(true, sitexml.siteXMLIsValid(xml), "sitexml.siteXMLIsValid")
 })
 
+//sitexml.aliasIsValid
+test(function(t){
+  t.is(false, sitexml.aliasIsValid(""), "sitexml.aliasIsValid (empty string)")
+  t.is(false, sitexml.aliasIsValid(undefined), "sitexml.aliasIsValid (undefined)")
+  t.is(false, sitexml.aliasIsValid(null), "sitexml.aliasIsValid (null)")
+  t.is(true, sitexml.aliasIsValid(0), "sitexml.aliasIsValid (0)")
+  t.is(true, sitexml.aliasIsValid("a"), "sitexml.aliasIsValid ('a')")
+})
+
 //end and print stats
 test(function(t) {
   t.end();
