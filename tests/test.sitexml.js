@@ -294,6 +294,23 @@ test(function(t){
   t.is(true, sitexml.aliasIsValid("a"), "sitexml.aliasIsValid ('a')")
 })
 
+//getDirectChildNodes
+/*
+  Make sure that .site.xml has corresponding structure!
+*/
+test(function(t){
+  let siteNode = sitexml.xmldoc.getElementsByTagName('site')[0]
+  //direct child nodes of the SITE node
+  let meta = sitexml.getDirectChildNodes(siteNode, 'META')
+  t.is(1, Object.keys(meta).length, "sitexml.getDirectChildNodes (META)")
+  meta = sitexml.getDirectChildNodes(siteNode, 'mEta')
+  t.is(1, Object.keys(meta).length, "sitexml.getDirectChildNodes (mEta)")
+  meta = sitexml.getDirectChildNodes(siteNode, 'theme')
+  t.is(5, Object.keys(meta).length, "sitexml.getDirectChildNodes (theme))")
+  let nothing = sitexml.getDirectChildNodes(siteNode, 'nothing')
+  t.is(0, Object.keys(nothing).length, "sitexml.getDirectChildNodes (nothing)")
+})
+
 //end and print stats
 test(function(t) {
   t.end();

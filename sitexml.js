@@ -450,4 +450,20 @@ sitexml.aliasIsValid = function(alias) {
   )
 }
 
+sitexml.getDirectChildNodes = function(node, name) {
+  let res = {}, count = 0
+  if (node && node.childNodes && name) {
+    for (let key in node.childNodes) {
+      // skip loop if the property is from prototype
+      if (!node.childNodes.hasOwnProperty(key)) continue
+      let obj = node.childNodes[key]
+      if (obj.nodeName && name.toLowerCase && obj.nodeName.toLowerCase() === name.toLowerCase()) {
+        res[count] = obj
+        count++
+      }
+    }
+  }
+  return res
+}
+
 module.exports = sitexml.init()
