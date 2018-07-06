@@ -113,7 +113,7 @@ sitexml.getNaviHtml = function(node, maxlevel = 0, level = 0) {
       if (page.getAttribute('nonavi') == "yes") continue
       pid = page.getAttribute('id')
       liclass = (pid == this.currentPID) ? ' class="siteXML-current"' : ''
-      href = (page.getAttribute("alias")) ? '/' + page.getAttribute('alias') : '/?id=' . pid
+      href = (this.aliasIsValid(page.getAttribute("alias"))) ? '/' + page.getAttribute('alias') : '/?id=' + pid
       if (this.basePath) href = '/' + this.basePath + href
       contentNodes = page.getElementsByTagName('content')
       name = page.getAttribute('name') || "page" + pid
