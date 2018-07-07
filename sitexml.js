@@ -451,7 +451,7 @@ sitexml.aliasIsValid = function(alias) {
 }
 
 sitexml.getDirectChildNodes = function(node, name) {
-  let res = {}, count = 0
+  let res = [], count = 0
   if (node && node.childNodes && name) {
     for (let key in node.childNodes) {
       // skip loop if the property is from prototype
