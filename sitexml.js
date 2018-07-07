@@ -106,7 +106,7 @@ sitexml.getNaviHtml = function(node, maxlevel = 0, level = 0) {
   if (!node) node = this.xmldoc.getElementsByTagName('site')[0];
   var html = '';
   if (!maxlevel || maxlevel >= level) {
-    var pages = node.getElementsByTagName('page')
+    var pages = this.getDirectChildNodes(node, 'page')
     var page, liclass, href, contentNodes, pid, name
     for (var i = 0; i < pages.length; i++) {
       page = pages[i]
