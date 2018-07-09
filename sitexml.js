@@ -56,30 +56,53 @@ sitexml.getPageById = function(id){
 sitexml.getPageHTMLByPageNode = function(page) {
   var themeHtml = this.getPageThemeHtml(page) //first time selecting theme
   var themeNode = this.getPageThemeNode(page) //second time selecting theme (might need to refactor)
-  var title = this.getPageTitle(page)
-  var sitename = this.getSiteName(page)
-  var themePath = themeNode.getAttribute('dir')
-  var content = []
-  var meta = []
-  var navi = this.getNaviHtml()
-  var cs = page.getElementsByTagName('content')
-  for (var i = 0; i < cs.length; i++) {
-    content.push({
-      name: cs[i].getAttribute('name'),
-      html: this.getContentNodeTextContent(cs[i])
-    })
+  var commands = this.processor.parse(themeHtml) //after this point process should buffer normalized theme html, so no need to pass it to processPage function
+  commands = [...new Set(commands)]
+  var title, sitename, themePath, content = [], meta = [], navi = {}
+  if (commands.indexOf('TITLE') > -1) title = this.getPageTitle(page)
+  if (commands.indexOf('SITENAME') > -1) sitename = this.getSiteName(page)
+  if (commands.indexOf('THEME_PATH') > -1) themePath = themeNode.getAttribute('dir')
+  for (var j = 0, m = commands.length; j < m; j++) {
+    var command = commands[j]
+    if (command.indexOf('NAVI') > -1) {
+      navi[command] = this.getNaviHtmlFromCommand(command)
+
+    } else if (command.substr('META') > -1) {
+      var metas = themeNode.getElementsByTagName('meta')
+      for (var i = 0; i < metas.length; i++) {
+        var string = this.getMetaHtmlByNode(metas[i])
+        meta.push(string)
+      }
+      var metas = page.getElementsByTagName('meta')
+      for (var i = 0; i < metas.length; i++) {
+        var string = this.getMetaHtmlByNode(metas[i])
+        meta.push(string)
+      }
+
+    } else if (command.indexOf('CONTENT') > -1) { //possible to optimize by the command, maybe no need to dig all content for the page
+      var cs = page.getElementsByTagName('content')
+      for (var i = 0; i < cs.length; i++) {
+        content.push({
+          name: cs[i].getAttribute('name'),
+          html: this.getContentNodeTextContent(cs[i])
+        })
+      }
+    }
   }
-  var metas = themeNode.getElementsByTagName('meta')
-  for (var i = 0; i < metas.length; i++) {
-    var string = this.getMetaHtmlByNode(metas[i])
-    meta.push(string)
+  return this.processor.processPage({title, sitename, content, themeHtml, themePath, meta, navi}) //process by this time should already have themeHtml normalized, so no need to actually pass themeHtml
+}
+
+sitexml.getNaviHtmlFromCommand = function (command) {
+  var html = ''
+  var argStart = command.indexOf('(')
+  var argEnd = command.indexOf(')')
+  if (argStart > -1 && argEnd > -1) {
+    var args = command.substring(argStart + 1, argEnd).split(',')
+    html = this.getNaviHtml(this.getPageNodeById(args[0]), args[1]);
+  } else {
+    html = this.getNaviHtml()
   }
-  var metas = page.getElementsByTagName('meta')
-  for (var i = 0; i < metas.length; i++) {
-    var string = this.getMetaHtmlByNode(metas[i])
-    meta.push(string)
-  }
-  return this.processor.processPage({title, sitename, content, themeHtml, themePath, meta, navi})
+  return html;
 }
 
 sitexml.getMetaHtmlByNode = function (metaNode) {
@@ -120,7 +143,7 @@ sitexml.getNaviHtml = function(node, maxlevel = 0, level = 0) {
       if (contentNodes.length) {
         html += '<li' + liclass + ' pid="' + pid + '"><a href="' + href + '" pid="' + pid + '">' + name + '</a>';
       } else {
-        html += '<li' + liclass + 'pid="' + pid + '">' + name + '';
+        html += '<li' + liclass + ' pid="' + pid + '">' + name + '';
       }
       html += this.getNaviHtml(page, maxlevel, level)
       html += '</li>';

@@ -86,7 +86,13 @@
         <content id="30" name="main">not_existing.html</content>
         <content id="31" name="main">test_string.html</content>
     </page>
-    <page name="Tests" id="30" alias="tests">
+    <page id="30" name="Tests" alias="tests">
         <content id="32" name="main">tests.html</content>
+    </page>
+    <page id="31" name="Nested pages">
+      <page id="32" name="Nested page 1 L1">
+        <page id="33" name="Nested page L2"></page>
+      </page>
+      <page id="34" name="Nested page 2 L1"></page>
     </page>
 </site>

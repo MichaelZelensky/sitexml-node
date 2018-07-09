@@ -247,19 +247,6 @@ test(function(t) {
   t.is(typeof navi, 'string', "getNaviHtml")
 })
 
-//processor.replaceNavi
-test(function(t) {
-  var html = "abc <%NAVI%> def"
-  var navi = '<li href="test_navi"/>'
-  var checkHtml = 'abc <li href="test_navi"/> def'
-  var newHtml = sitexml.processor.replaceNavi(html, navi)
-  t.is(checkHtml, newHtml, "processor.replaceNavi")
-})
-
-test(function(t){
-  t.is(1, 1, "sitexml.handler tests to be written")
-})
-
 test(function(t){
   t.is(true, sitexml.setSession(), "sitexml.setSession")
 })
@@ -309,6 +296,48 @@ test(function(t){
   t.is(5, Object.keys(meta).length, "sitexml.getDirectChildNodes (theme))")
   let nothing = sitexml.getDirectChildNodes(siteNode, 'nothing')
   t.is(0, Object.keys(nothing).length, "sitexml.getDirectChildNodes (nothing)")
+})
+
+
+//processor.replaceNavi
+test(function(t) {
+  var html = "abc <%NAVI%> def"
+  var navi = {
+    'NAVI':
+    '<li href="test_navi"/>'
+  }
+  var checkHtml = 'abc <li href="test_navi"/> def'
+  sitexml.processor.parse(html)
+  var newHtml = sitexml.processor.replaceNavi(html, navi)
+  t.is(checkHtml, newHtml, "processor.replaceNavi")
+})
+
+//processor.parse
+test(function(t){
+  var html = "abc <%NAVI%> <%NAVI(1,2)%> <%TITLE%> <%CONTENT(main)%> <%META%> <%THEME_PATH%> <%sitename%>def"
+  var commands = sitexml.processor.parse(html)
+  t.is(7, commands.length, "processor.parse - 7 commands")
+  t.is('NAVI', commands[0], "processor.parse - NAVI")
+  t.is('NAVI(1,2)', commands[1], "processor.parse - NAVI(1,2)")
+  t.is('TITLE', commands[2], "processor.parse - TITLE")
+  t.is('CONTENT(MAIN)', commands[3], "processor.parse - CONTENT(MAIN)")
+  t.is('META', commands[4], "processor.parse - META")
+  t.is('THEME_PATH', commands[5], "processor.parse - THEME_PATH")
+  t.is('SITENAME', commands[6], "processor.parse - SITENAME")
+  t.is(true, sitexml.processor.buffer && sitexml.processor.buffer.normalized, 'processor.buffer.normalized is true')
+  t.is(7, sitexml.processor.buffer && sitexml.processor.buffer.commands.length, 'processor.buffer.commands.length is 7')
+  t.is("abc <%NAVI%> <%NAVI(1,2)%> <%TITLE%> <%CONTENT(MAIN)%> <%META%> <%THEME_PATH%> <%SITENAME%>def", sitexml.processor.buffer && sitexml.processor.buffer.normalizedThemeHtml, 'processor.buffer.normalizedThemeHtml')
+})
+
+test(function(t){
+  var naviHtml = sitexml.getNaviHtmlFromCommand('NAVI(31)')
+  var checkStr = '<ul class="siteXML-navi level-1"><li pid="32">Nested page 1 L1<ul class="siteXML-navi level-2"><li pid="33">Nested page L2</li></ul></li><li pid="34">Nested page 2 L1</li></ul>'
+  t.is(checkStr, naviHtml, "sitexml - sitexml.getNaviHtmlFromCommand('NAVI(31)'")
+  var naviHtml = sitexml.getNaviHtmlFromCommand('NAVI(31,2)')
+    t.is(checkStr, naviHtml, "sitexml - sitexml.getNaviHtmlFromCommand('NAVI(31,2)'")
+  var naviHtml = sitexml.getNaviHtmlFromCommand('NAVI(31,1)')
+  var checkStr = '<ul class="siteXML-navi level-1"><li pid="32">Nested page 1 L1</li><li pid="34">Nested page 2 L1</li></ul>'
+  t.is(checkStr, naviHtml, "sitexml - sitexml.getNaviHtmlFromCommand('NAVI(31,1)'")
 })
 
 //end and print stats
