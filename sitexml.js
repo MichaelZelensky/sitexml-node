@@ -130,17 +130,24 @@ sitexml.getNaviHtml = function(node, maxlevel = 0, level = 0) {
   var html = '';
   if (!maxlevel || maxlevel >= level) {
     var pages = this.getDirectChildNodes(node, 'page')
-    var page, liclass, href, contentNodes, pid, name
+    var page, liclass, href, contentNodes, pid, name, alias
     for (var i = 0; i < pages.length; i++) {
       page = pages[i]
       if (page.getAttribute('nonavi') == "yes") continue
       pid = page.getAttribute('id')
       liclass = (pid == this.currentPID) ? ' class="siteXML-current"' : ''
-      href = (this.aliasIsValid(page.getAttribute("alias"))) ? '/' + page.getAttribute('alias') : '/?id=' + pid
-      if (this.basePath) href = '/' + this.basePath + href
+      alias = page.getAttribute("alias")
       contentNodes = this.getDirectChildNodes(page, 'content')
       name = page.getAttribute('name') || "page" + pid
       if (contentNodes.length) {
+        href = (this.aliasIsValid(alias)) ? '/' + alias : '/?id=' + pid
+        if (this.basePath) href = '/' + this.basePath + href
+        href = this.checkHref(href)
+        html += '<li' + liclass + ' pid="' + pid + '"><a href="' + href + '" pid="' + pid + '">' + name + '</a>';
+      } else if (this.aliasIsValid(alias)) {
+        href = '/' + alias
+        if (this.basePath) href = '/' + this.basePath + href
+        href = this.checkHref(href)
         html += '<li' + liclass + ' pid="' + pid + '"><a href="' + href + '" pid="' + pid + '">' + name + '</a>';
       } else {
         html += '<li' + liclass + ' pid="' + pid + '">' + name + '';
@@ -151,6 +158,11 @@ sitexml.getNaviHtml = function(node, maxlevel = 0, level = 0) {
     if (html != '') html = `<ul class="siteXML-navi level-${level}">${html}</ul>`;
   }
   return html;
+}
+
+sitexml.checkHref = function(href) {
+  href = href.replace('//', '/')
+  return href
 }
 
 sitexml.getPageThemeNode = function (pageNode) {

@@ -340,6 +340,11 @@ test(function(t){
   t.is(checkStr, naviHtml, "sitexml - sitexml.getNaviHtmlFromCommand('NAVI(31,1)'")
 })
 
+test(function(t){
+  var href = '//'
+  t.is(sitexml.checkHref(href), '/', 'sitexml.checkHref ("//" -> "/")')
+})
+
 //end and print stats
 test(function(t) {
   t.end();
