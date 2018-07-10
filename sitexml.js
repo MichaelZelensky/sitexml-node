@@ -138,7 +138,7 @@ sitexml.getNaviHtml = function(node, maxlevel = 0, level = 0) {
       liclass = (pid == this.currentPID) ? ' class="siteXML-current"' : ''
       href = (this.aliasIsValid(page.getAttribute("alias"))) ? '/' + page.getAttribute('alias') : '/?id=' + pid
       if (this.basePath) href = '/' + this.basePath + href
-      contentNodes = page.getElementsByTagName('content')
+      contentNodes = this.getDirectChildNodes(page, 'content')
       name = page.getAttribute('name') || "page" + pid
       if (contentNodes.length) {
         html += '<li' + liclass + ' pid="' + pid + '"><a href="' + href + '" pid="' + pid + '">' + name + '</a>';
